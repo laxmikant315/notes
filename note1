@@ -49,3 +49,80 @@ const base = {
 
 const diff = difference(object, base);
 console.log(diff); // Output: { age: 25 }
+
+
+
+
+// Test cases
+const testCases = [
+    {
+        description: "Basic difference",
+        object: { a: 1, b: 2 },
+        base: { a: 1, b: 3 },
+        expected: { b: 2 }
+    },
+    {
+        description: "Nested objects",
+        object: { a: { b: 1 }, c: 2 },
+        base: { a: { b: 2 }, c: 2 },
+        expected: { a: { b: 1 } }
+    },
+    {
+        description: "Empty objects and arrays",
+        object: { a: {}, b: [], c: '' },
+        base: { a: {}, b: [], c: '' },
+        expected: null
+    },
+    {
+        description: "Undefined values",
+        object: { a: undefined, b: 2 },
+        base: { a: null, b: 2 },
+        expected: null
+    },
+    {
+        description: "Complex nested structures",
+        object: { a: { b: { c: {} } }, d: 4 },
+        base: { a: { b: { c: undefined } }, d: 5 },
+        expected: { d: 4 }
+    },
+    {
+        description: "Arrays of objects",
+        object: { a: [{ b: 1 }] },
+        base: { a: [{ b: 2 }] },
+        expected: { a: [{ b: 1 }] }
+    },
+    {
+        description: "Mixed types",
+        object: { a: 1, b: "test", c: null },
+        base: { a: 1, b: "test1", c: undefined },
+        expected: { b: "test" }
+    },
+    {
+        description: "Empty object to null",
+        object: { a: {} },
+        base: { a: null },
+        expected: null
+    },
+    {
+        description: "Empty string to null",
+        object: { a: "" },
+        base: { a: null },
+        expected: null
+    },
+    {
+        description: "Multiple differences",
+        object: { a: 1, b: 2, c: 3 },
+        base: { a: 1, b: 3, c: 4 },
+        expected: { b: 2, c: 3 }
+    }
+];
+
+// Run test cases
+testCases.forEach(({ description, object, base, expected }) => {
+    const result = difference(object, base);
+    console.log(description);
+    console.log("Result:", result);
+    console.log("Expected:", expected);
+    console.log("Pass:", _.isEqual(result, expected));
+    console.log('--------------------------------');
+});
