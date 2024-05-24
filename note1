@@ -1,0 +1,51 @@
+
+function difference(object, base) {
+    function normalize(value) {
+        if (_.isObject(value) && _.isEmpty(value)) {
+            return null;
+        } else if (_.isArray(value)) {
+            return value.map(item => normalize(item));
+        } else if (_.isObject(value)) {
+            return _.mapValues(value, normalize);
+        } else if (_.isUndefined(value) || value === '') {
+            return null;
+        }
+        return value;
+    }
+
+    function changes(object, base) {
+        return _.transform(object, (result, value, key) => {
+            if (!_.isEqual(value, base[key])) {
+                result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
+            }
+        });
+    }
+
+    const normalizedObject = normalize(_.cloneDeep(object));
+    const normalizedBase = normalize(_.cloneDeep(base));
+    const result = changes(normalizedObject, normalizedBase);
+    return _.isEmpty(result) ? null : result;
+}
+
+
+// Example usage
+const object = {
+    name: "Alice",
+    age: 25,
+    address: [{
+        city: "Wonderland",
+        zip: {}
+    }]
+};
+
+const base = {
+    name: "Alice",
+    age: 30,
+    address: [{
+        city: "Wonderland",
+        zip: undefined
+    }]
+};
+
+const diff = difference(object, base);
+console.log(diff); // Output: { age: 25 }
