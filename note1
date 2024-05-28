@@ -1,17 +1,31 @@
 function convertBooleanStrings(obj) {
   if (typeof obj === 'object' && obj !== null) {
     for (let key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        if (typeof obj[key] === 'object') {
-          convertBooleanStrings(obj[key]);
-        } else if (typeof obj[key] === 'string') {
-          if (obj[key].toLowerCase() === 'true') {
-            obj[key] = true;
-          } else if (obj[key].toLowerCase() === 'false') {
-            obj[key] = false;
-          }
+      const value = obj[key];
+      if (typeof value === 'object') {
+        convertBooleanStrings(value);
+      } else if (typeof value === 'string') {
+        if (value.toLowerCase() === 'true') {
+          obj[key] = true;
+        } else if (value.toLowerCase() === 'false') {
+          obj[key] = false;
         }
       }
     }
   }
 }
+
+// Example usage:
+let data = {
+  action: "false",
+  nested: {
+    isEnabled: "true",
+    settings: {
+      autoSave: "false",
+      showNotifications: "true"
+    }
+  }
+};
+
+convertBooleanStrings(data);
+console.log(data);
